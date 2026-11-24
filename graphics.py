@@ -80,6 +80,11 @@ def viewport(size: tuple[int, int]) -> pygame.Rect:
     return box
 
 
+def _score_text(hand: Hand) -> str:
+    """Подписать обе суммы, пока туз можно считать за один или за 11."""
+    return " / ".join(str(total) for total in hand.totals)
+
+
 def _suit(
     surface: pygame.Surface,
     suit: Suit,
@@ -382,7 +387,7 @@ class TableView:
             self.flip_at is None or now >= self.flip_at + FLIP_TIME / 2
         )
         visible = table.dealer if opened else Hand(table.dealer.cards[:1])
-        dealer = f"Дилер · {visible.score}" if visible.cards else "Дилер"
+        dealer = f"Дилер · {_score_text(visible)}" if visible.cards else "Дилер"
         self._text(
             dealer, (TABLE.centerx, 130), 19, WHITE, center=True, bold=True
         )
@@ -432,11 +437,11 @@ class TableView:
         title = f"Рука {index + 1}" if len(table.hands) == 2 else "Игрок"
         active = table.phase is Phase.PLAYER and table.active == index
         if active:
-            badge = pygame.Rect(x - 79, 397, 158, 32)
+            badge = pygame.Rect(x - 95, 397, 190, 32)
             pygame.draw.rect(self.frame, (20, 69, 49), badge, border_radius=16)
             pygame.draw.rect(self.frame, GOLD_DARK, badge, 1, 16)
         self._text(
-            f"{title} · {hand.score}",
+            f"{title} · {_score_text(hand)}",
             (x, 413),
             19,
             GOLD if active else WHITE,

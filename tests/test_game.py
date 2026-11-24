@@ -30,8 +30,10 @@ class TableTest(TestCase):
     def test_aces_change_value(self) -> None:
         """Тузы считаются за один, когда одиннадцать вызвало бы перебор."""
         hand = Hand([Card(rank, Suit.HEARTS) for rank in (1, 1, 8)])
+        self.assertEqual(hand.totals, (10, 20))
         self.assertEqual(hand.score, 20)
         hand.cards.append(Card(7, Suit.CLUBS))
+        self.assertEqual(hand.totals, (17,))
         self.assertEqual(hand.score, 17)
 
     def test_natural_pays_three_to_two(self) -> None:

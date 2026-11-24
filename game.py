@@ -68,12 +68,17 @@ class Hand:
     outcome: Outcome | None = None
 
     @property
-    def score(self) -> int:
-        """Выбрать наибольшую допустимую сумму с тузом за один или 11."""
+    def totals(self) -> tuple[int, ...]:
+        """Вернуть суммы руки с тузом за один и, если возможно, за 11."""
         low = sum(min(card.rank, 10) for card in self.cards)
         if low <= 11 and any(card.rank == 1 for card in self.cards):
-            return low + 10
-        return low
+            return low, low + 10
+        return (low,)
+
+    @property
+    def score(self) -> int:
+        """Выбрать наибольшую допустимую сумму руки."""
+        return self.totals[-1]
 
     @property
     def natural(self) -> bool:
