@@ -36,13 +36,18 @@ def keyboard_action(
     if phase is Phase.BET:
         if key == pygame.K_RETURN:
             return "deal" if can_bet else "reset"
+        if key == pygame.K_BACKSPACE:
+            return "clear"
         return CHIP_KEYS.get(key)
     if phase is Phase.RESULT and key == pygame.K_RETURN:
         return "next"
     if phase is Phase.PLAYER:
-        return {pygame.K_SPACE: Action.HIT, pygame.K_RETURN: Action.STAND}.get(
-            key
-        )
+        return {
+            pygame.K_SPACE: Action.HIT,
+            pygame.K_RETURN: Action.STAND,
+            pygame.K_d: Action.DOUBLE,
+            pygame.K_s: Action.SPLIT,
+        }.get(key)
     return None
 
 
